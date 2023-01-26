@@ -1,0 +1,49 @@
+{
+  "generator-ngx-rocket": {
+    "version": "11.0.0",
+    "props": {
+      "location": "path",
+      "strict": true,
+      "skipInstall": false,
+      "skipQuickstart": false,
+      "initGit": true,
+      "usePrefix": true,
+      "appName": "growin",
+      "target": [
+        "cordova"
+      ],
+      "mobile": [
+        "ios",
+        "android"
+      ],
+      "ui": "ionic",
+      "layout": "tabs",
+      "features": [
+        "auth",
+        "lazy",
+        "cypress"
+      ],
+      "languages": [
+        "en-US"
+      ],
+      "tools": [
+        "prettier",
+        "hads"
+      ],
+      "utility": [
+        "lodash",
+        "moment"
+      ],
+      "projectName": "growin",
+      "packageManager": "npm",
+      "desktop": [],
+      "deploy": "none",
+      "pwa": false,
+      "auth": true,
+      "lazy": true,
+      "e2e": false,
+      "cypress": true,
+      "angulartics": false
+    }
+  }
+}
