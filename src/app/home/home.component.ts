@@ -1,30 +1,49 @@
 import { Component, OnInit } from '@angular/core';
-import { finalize } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntilDestroy } from '@shared';
 
-import { QuoteService } from './quote.service';
+import { Post, PostService } from './post.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  quote: string | undefined;
-  isLoading = false;
+  posts: Post[] = [];
+  postForm!: FormGroup;
+  loading = true;
+  saving = false;
 
-  constructor(private quoteService: QuoteService) {}
+  constructor(private postService: PostService, private formBuilder: FormBuilder) {
+    this.postForm = this.formBuilder.group({
+      title: ['', Validators.required],
+      content: ['', Validators.required],
+    });
+  }
 
   ngOnInit() {
-    this.isLoading = true;
-    this.quoteService
-      .getRandomQuote({ category: 'dev' })
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe((quote: string) => {
-        this.quote = quote;
-      });
+    this.postService.getPosts().subscribe((posts) => {
+      this.posts = posts;
+      this.loading = false;
+    });
+  }
+
+  create() {
+    this.postForm.disable();
+    this.saving = true;
+    this.postService.createPost(this.postForm.value).subscribe((post) => {
+      this.saving = false;
+      this.postForm.reset();
+      this.postForm.enable();
+      this.ngOnInit();
+    });
+  }
+
+  deletePost(post: Post) {
+    this.postService.deletePost(post).subscribe(() => {
+      this.ngOnInit();
+    });
   }
 }
